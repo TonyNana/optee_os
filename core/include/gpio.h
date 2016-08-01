@@ -38,17 +38,23 @@ enum gpio_level {
 	GPIO_LEVEL_HIGH
 };
 
+enum gpio_interrupt {
+	GPIO_INTERRUPT_DISABLE,
+	GPIO_INTERRUPT_ENABLE
+};
+
+struct gpio_chip {
+	const struct gpio_ops *ops;
+};
+
 struct gpio_ops {
 	enum gpio_dir (*get_direction)(unsigned int gpio_pin);
 	void (*set_direction)(unsigned int gpio_pin, enum gpio_dir direction);
 	enum gpio_level (*get_value)(unsigned int gpio_pin);
 	void (*set_value)(unsigned int gpio_pin, enum gpio_level value);
+	enum gpio_interrupt (*get_interrupt)(unsigned int gpio_pin);
+	void (*set_interrupt)(unsigned int gpio_pin,
+		enum gpio_interrupt ena_dis);
 };
-
-enum gpio_dir gpio_get_direction(unsigned int gpio_pin);
-void gpio_set_direction(unsigned int gpio_pin, enum gpio_dir direction);
-enum gpio_level gpio_get_value(unsigned int gpio_pin);
-void gpio_set_value(unsigned int gpio_pin, enum gpio_level value);
-void gpio_init(const struct gpio_ops *ops);
 
 #endif	/* __GPIO_H__ */
